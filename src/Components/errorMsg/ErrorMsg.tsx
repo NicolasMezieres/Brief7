@@ -1,12 +1,12 @@
 import { ErrorMsgProps } from "@/Utils/typeComponent";
 import React from "react";
 
-const ErrorMsg = ({ additionalCss }: ErrorMsgProps) => {
+const ErrorMsg = ({ additionalCss, content }: ErrorMsgProps) => {
   return (
     <p
-      className={`${additionalCss} text-red-800 text-center text-lg font-bold select-none`}
+      className={`${additionalCss} text-red-600 text-center text-lg font-bold select-none`}
     >
-      This field is required
+      {content}
     </p>
   );
 };

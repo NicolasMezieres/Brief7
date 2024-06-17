@@ -4,7 +4,7 @@ import React from "react";
 const Footer = ({ additionalCss, children }: footerProps) => {
   return (
     <footer
-      className={`additionalCss bg-gray-1000 flex justify-center items-center font-bold h-20`}
+      className={`${additionalCss} bg-black flex justify-center items-center font-bold h-20`}
     >
       {children}
     </footer>

@@ -1,12 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap");
+
+@media only screen and (max-width: 600px) {
+  .MuiBox-root {
+    width: 280px !important;
+  }
+  .slick-dots {
+    z-index: -1;
+  }
+}
+
 .styleSubmit {
   box-shadow: 0 1px 10px white;
 }
 .styleSubmit:hover {
   box-shadow: 0 1px 10px orange;
 }
+.boxShadowOrange {
+  box-shadow: 1px 1px 15px orange;
+}
 .styleEmail {
   font-family: "Bungee Spice", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+.styleTitle {
+  font-family: "Tourney", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  width: 100;
+}
+
+.styleBgImageMain {
+  background-image: url("/bg1.jpg");
+}
+.slick-dots {
+  bottom: -5px !important;
+}
+
+.slick-dots li button::before {
+  color: white !important;
+}
+
+.wallet:hover ~ .wallet_burger {
+  opacity: 1;
+  display: block;
+  position: absolute;
 }

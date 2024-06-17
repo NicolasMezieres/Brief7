@@ -18,7 +18,7 @@ export async function allTrade() {
     });
 }
 
-export async function addTrade(addTrade: addTradeProps) {
+export async function addTrade(id_offer: string) {
   let url = `${process.env.NEXT_PUBLIC_API_URL}trade/create`;
   let axiosConfig = {
     headers: {
@@ -32,11 +32,7 @@ export async function addTrade(addTrade: addTradeProps) {
     .post(
       url,
       {
-        id_giver: addTrade.id_giver,
-        id_receiver: addTrade.id_receiver,
-        id_crypto: addTrade.id_crypto,
-        amount_traded: addTrade.amount_traded,
-        id_offer: addTrade.id_offer,
+        id_offer: id_offer,
       },
       axiosConfig
     )

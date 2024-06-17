@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function userAssets() {
+export async function getUserAssets() {
   let url = `${process.env.NEXT_PUBLIC_API_URL}user/my-assets`;
   let axiosConfig = {
     headers: {
@@ -16,7 +16,7 @@ export async function userAssets() {
       throw new Error(e);
     });
 }
-export async function usersAssets() {
+export async function getUsersAssets() {
   let url = `${process.env.NEXT_PUBLIC_API_URL}user/users-assets`;
   let axiosConfig = {
     headers: {
@@ -26,13 +26,13 @@ export async function usersAssets() {
   return axios
     .get(url, axiosConfig)
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch((e) => {
       throw new Error(e);
     });
 }
-export async function userTrades() {
+export async function getUserTrades() {
   let url = `${process.env.NEXT_PUBLIC_API_URL}user/my-trades`;
   let axiosConfig = {
     headers: {
@@ -42,7 +42,7 @@ export async function userTrades() {
   return axios
     .get(url, axiosConfig)
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch((e) => {
       throw new Error(e);

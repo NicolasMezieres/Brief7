@@ -27,7 +27,7 @@ const Logo = () => {
         title="logo picture coin"
         className={`${animation} cursor-pointer`}
       />
-      <p className="mt-2 styleEmail">Poororich</p>
+      <p className="mt-2 styleEmail select-none">Poororich</p>
     </div>
   );
 };

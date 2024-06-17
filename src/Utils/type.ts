@@ -3,11 +3,13 @@
  */
 export type addUserProps = {
   firstName: string;
+  age: number;
   lastName: string;
   pseudo: string;
   city: string;
   email: string;
   password: string;
+  rePassword: string;
   promoCode?: string;
 };
 /**
@@ -64,16 +66,28 @@ export type addPromoCodeProps = {
   value: number;
   id: string;
 };
+export type cryptoProps = {
+  id: string;
+  name: string;
+  value: number;
+  image: string;
+  quantity: number;
+  created_at: string;
+  updated_at: string;
+};
 
 export type addCryptoProps = {
   name: string;
   value: number;
   image: string;
 };
-
-export type buyCryptoProps = {
+export type sellCryptoProps = {
   id_crypto: string;
   amount: number;
+};
+export type buyCryptoProps = {
+  id: string;
+  amount?: number;
 };
 
 export type updateCryptoProps = {
@@ -81,6 +95,16 @@ export type updateCryptoProps = {
   value: number;
   image: string;
   id: string;
+};
+export type OffersProps = {
+  id: string;
+  User: {
+    pseudo: string;
+  };
+  amount: number;
+  created_at: string;
+  id_user: string;
+  Crypto: cryptoProps;
 };
 
 export type addTradeProps = {
@@ -122,3 +146,51 @@ export type updateRoleProps = {
 //   admin = "ADMIN",
 //   user = "USER",
 // }
+
+export type usersAssetsProps = {
+  firstName: string;
+  lastName: string;
+  pseudo: string;
+  dollarAvailables: number;
+  UserHasCrypto: [
+    {
+      Crypto: {
+        id: string;
+        name: string;
+        value: number;
+        image: string;
+        quantity: number;
+        created_at: string;
+        updated_at: string;
+      };
+      amount: number;
+    }
+  ];
+};
+export type historyCryptoProps = {
+  created_at: string;
+  id: string;
+  id_crypto: string;
+  updated_at: string;
+  value: number;
+};
+// export type amountCryptHasUser = {
+//    amount: number
+// }
+// export type userCryptoAssetsProps = {
+//   UserHasCrypto: {
+//     Crypto: {
+//       id: string;
+//       name: string;
+//       value: number;
+//       image: string;
+//       quantity: number;
+//       created_at: string;
+//       updated_at: string;
+//     };
+//     amount: number;
+//   };
+// };
+// export type userAssetsContextProps = {
+//   userAsset: any;
+// };

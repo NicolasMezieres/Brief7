@@ -1,7 +1,9 @@
 import { addUserProps, loginProps } from "@/Utils/type";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export async function addUser(addUser: addUserProps) {
+  console.log(addUser);
   let url = `${process.env.NEXT_PUBLIC_API_URL}auth/signup`;
   if (!addUser.promoCode) {
     addUser.promoCode = "";
@@ -9,7 +11,7 @@ export async function addUser(addUser: addUserProps) {
 
   let axiosConfig = {
     headers: {
-      "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      "content-type": "application/json;charset=utf-8",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
@@ -25,6 +27,7 @@ export async function addUser(addUser: addUserProps) {
         email: addUser.email,
         password: addUser.password,
         promoCode: addUser.promoCode,
+        age: Number(addUser.age),
       },
       axiosConfig
     )
@@ -32,7 +35,9 @@ export async function addUser(addUser: addUserProps) {
       return res;
     })
     .catch((e) => {
-      throw new Error(e);
+      console.log(addUser.age, "valeur", typeof addUser.age, "typage");
+      toast.error(e.response.data.message, { autoClose: 5000 });
+      // throw new Error(e);
     });
 }
 export async function login(loginProps: loginProps) {
@@ -58,6 +63,8 @@ export async function login(loginProps: loginProps) {
       return res;
     })
     .catch((e) => {
-      throw new Error(e);
+      console.log(e);
+      // toast.error(e.response.data.message, { autoClose: 5000 });
+      // throw new Error(e);
     });
 }
