@@ -32,6 +32,16 @@ export type formProps = {
   onSubmit: any;
 };
 // <T extends FieldValues>
+export type cryptoFormProps = {
+  name: string;
+  value: number;
+  image: string;
+  quantity: number;
+};
+export type promoCodeFormProps = {
+  name: string;
+  value: number;
+};
 export type inputFormProps = {
   content: string;
   type: string;
@@ -42,15 +52,17 @@ export type inputFormProps = {
   listData?: apiCityProps[];
   change?: Function;
   autoComplete?: string;
+  defaultValue?: string | number;
 };
 export type inputNumberProps = {
   value: number;
-  valueMax: number;
+  valueMax?: number;
   setValue: React.Dispatch<React.SetStateAction<number>>;
   inputCss?: string;
   labelCss?: string;
   content: string;
 };
+export type promoCodeProps = {};
 export type inputSearchProps = {
   placeholder: string;
   valueChange: React.Dispatch<React.SetStateAction<string>>;

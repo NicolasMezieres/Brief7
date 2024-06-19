@@ -12,6 +12,7 @@ const InputForm = ({
   errors,
   listData,
   autoComplete,
+  defaultValue,
 }: inputFormProps) => {
   return (
     <div>
@@ -21,6 +22,7 @@ const InputForm = ({
       <input
         type={type}
         id={content}
+        defaultValue={defaultValue}
         list={`${content}data`}
         placeholder={`Enter ${content}`}
         className={`${inputCss} w-60 rounded-md border border-[#e0e0e0] bg-white py-1.5 px-0 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md`}

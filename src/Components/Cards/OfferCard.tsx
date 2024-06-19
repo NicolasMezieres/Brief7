@@ -7,6 +7,7 @@ import { addTrade } from "@/Services/trade/trade";
 import { toast } from "react-toastify";
 import InputSubmit from "../Inputs/submit";
 import { deleteOffer } from "@/Services/offer/offer";
+import { Roles } from "@/Utils/enum";
 
 export const OfferCard = ({
   offer,
@@ -31,8 +32,7 @@ export const OfferCard = ({
       toast.success("Offer delete");
     }
   }
-  //TODO FAIRE L'UPDATE OFFER mais bon sinon ta le header et le footer
-  //Todo à modifier
+
   return (
     <div className="justify-self-center w-64 lg:w-80 h-96 gap-4 py-4 flex flex-col items-center border-2 border-white rounded-xl boxShadowOrange transition duration-700 hover:-translate-y-1 hover:scale-110">
       <Paragraph content={offer.Crypto.name} />
@@ -76,7 +76,7 @@ export const OfferCard = ({
           <InputSubmit content={"buy"} onClick={handleBuyCryptoOffer} />
         )}
 
-      {user.pseudo === offer.User.pseudo && (
+      {window.localStorage.getItem("role") === Roles.admin && (
         <div className="flex gap-4">
           <InputSubmit content="Update" onClick={handleDeleteCryptoOffer} />
           <InputSubmit content="Delete" onClick={handleDeleteCryptoOffer} />

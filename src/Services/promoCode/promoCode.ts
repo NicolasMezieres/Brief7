@@ -11,7 +11,7 @@ export async function allPromoCode() {
   return axios
     .get(url, axiosConfig)
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch((e) => {
       throw new Error(e);
@@ -22,7 +22,7 @@ export async function addPromoCode(addPromoCodeProps: addPromoCodeProps) {
   let url = `${process.env.NEXT_PUBLIC_API_URL}promoCode/create`;
   let axiosConfig = {
     headers: {
-      "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      "content-type": "application/json;charset=utf-8",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -49,7 +49,7 @@ export async function updatePromoCode(addPromoCodeProps: addPromoCodeProps) {
   let url = `${process.env.NEXT_PUBLIC_API_URL}promoCode/update/${addPromoCodeProps.id}`;
   let axiosConfig = {
     headers: {
-      "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      "content-type": "application/json;charset=utf-8",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,

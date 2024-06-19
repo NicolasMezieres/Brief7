@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { addUserProps } from "@/Utils/type";
 import { apiCityProps, cityProps } from "@/Utils/typeComponent";
 import { getCity } from "@/Services/apiCity/apiCity";
-import * as yup from "yup";
+import yup from "yup";
 import { schema } from "@/Validator/validatorForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputForm from "@/Components/Inputs/inputForm";
@@ -33,15 +33,17 @@ const page = () => {
     watch,
     formState: { errors },
   } = useForm<addUserProps>({
-    mode: "onChange",
+    mode: "all",
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
     async function getDataCity() {
       const response = await getCity(watch("city"));
-      if (response?.status === 200) {
-        setCity(response.data);
+      if (response) {
+        if (response.status === 200) {
+          setCity(response.data);
+        }
       }
     }
     getDataCity();
@@ -63,10 +65,12 @@ const page = () => {
     }
     setIsLoading(true);
     const response = await addUser(data);
-    if (response?.status === 201) {
-      window.localStorage.setItem("token", response.data.access_token);
-      toast.success("succes");
-      push("/signin");
+    if (response) {
+      if (response?.status === 201) {
+        window.localStorage.setItem("token", response.data.access_token);
+        toast.success("succes");
+        push("/signin");
+      }
     }
     return setIsLoading(false);
   };

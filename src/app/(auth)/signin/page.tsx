@@ -29,11 +29,15 @@ const page = () => {
 
   const onSubmit: SubmitHandler<loginProps> = async (data) => {
     const response = await login(data);
-    if (response?.status === 200) {
-      setIsLoading(true);
-      window.localStorage.setItem("token", response.data.access_token);
-      toast.success("succes");
-      push("/home");
+    if (response) {
+      if (response?.status === 200) {
+        setIsLoading(true);
+        window.localStorage.setItem("token", response.data.access_token);
+        console.log(response.data);
+        window.localStorage.setItem("role", response.data.user.Role.id);
+        toast.success("succes");
+        push("/home");
+      }
     }
   };
   return (

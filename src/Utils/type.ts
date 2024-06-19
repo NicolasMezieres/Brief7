@@ -64,7 +64,7 @@ export type userLoginProps = {
 export type addPromoCodeProps = {
   name: string;
   value: number;
-  id: string;
+  id?: string;
 };
 export type cryptoProps = {
   id: string;
@@ -149,6 +149,7 @@ export type updateRoleProps = {
 
 export type usersAssetsProps = {
   firstName: string;
+  age: number;
   lastName: string;
   pseudo: string;
   dollarAvailables: number;

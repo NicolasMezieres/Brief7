@@ -1,4 +1,5 @@
 "use client";
+import AdminButtons from "@/Components/Admin/AdminButtons";
 import CardContainer from "@/Components/Cards/CardContainer";
 import CardCrypto from "@/Components/Cards/CardCrypto";
 import { OfferCard } from "@/Components/Cards/OfferCard";
@@ -12,9 +13,10 @@ import Wallet from "@/Components/Wallet/wallet";
 import { allCrypto, searchCrypto } from "@/Services/crypto/crypto";
 import { allOffer } from "@/Services/offer/offer";
 import { getUserAssets } from "@/Services/user/user";
+import { Roles } from "@/Utils/enum";
 import { settings } from "@/Utils/slider";
 import { OffersProps, cryptoProps, usersAssetsProps } from "@/Utils/type";
-import { ContextReloadNeeded } from "@/context/Context";
+import { ContextReloadNeeded, Contextloading } from "@/context/Context";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Triangle } from "react-loader-spinner";
@@ -26,9 +28,11 @@ const page = () => {
   const [offers, setOffers] = useState<OffersProps[]>([]);
   const [dataUser, setDataUser] = useState<usersAssetsProps>();
   const [searchDataCryptos, setSearchDataCryptos] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isReloadNeeded, setIsReloadNeeded] = useState(false);
+  const [role, setRole] = useState<string>("");
   useEffect(() => {
+    setRole(window.localStorage.getItem("role"));
     setIsReloadNeeded(false);
     setIsLoading(true);
     async function getMyAssets() {
@@ -36,6 +40,12 @@ const page = () => {
       if (response.status === 200) {
         setDataUser(response.data);
         setIsLoading(false);
+      }
+      if (
+        response.response?.status === 401 ||
+        response.response?.status === 403
+      ) {
+        push("/signin");
       }
     }
     getMyAssets();
@@ -69,44 +79,59 @@ const page = () => {
     getAllOffer();
   }, [isReloadNeeded]);
 
+  if (isLoading) {
+    return (
+      <Triangle
+        visible={true}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="triangle-loading"
+        wrapperStyle={{}}
+        wrapperClass="fixed z-20 top-24 right-20"
+      />
+    );
+  }
   return (
     <div>
-      <Header additionalCss="">
-        <div className="flex justify-between gap-4 md:gap-16">
-          <div className="flex flex-col md:flex-row gap-8">
-            <Wallet user={dataUser} />
-            <InputSubmit
-              content={"My Trade"}
-              onClick={() => {
-                push("/myTrade");
-              }}
-            />
+      <p>text</p>
+      <Contextloading.Provider value={{ isLoading, setIsLoading }}>
+        <Header additionalCss="">
+          <div className="flex justify-center items-center gap-4 md:gap-16 md:mr-8">
+            <div className="flex flex-col md:flex-row gap-8 mb-10">
+              <Wallet user={dataUser} />
+              <InputSubmit
+                content={"My Trade"}
+                onClick={() => {
+                  push("/myTrade");
+                }}
+              />
+            </div>
+            <Logo />
+            <div className="flex flex-col md:flex-row gap-8 mb-10">
+              <InputSubmit
+                content={"Profil"}
+                onClick={() => {
+                  push("/profil");
+                  setIsLoading(true);
+                }}
+              />
+              <Logout />
+            </div>
           </div>
-          <Logo />
-          <div className="flex flex-col md:flex-row gap-8">
-            <InputSubmit
-              content={"Profil"}
-              onClick={() => {
-                push("/profil");
-              }}
-            />
-            <Logout />
-          </div>
-        </div>
-      </Header>
+        </Header>
+      </Contextloading.Provider>
+      {role === Roles.admin && (
+        <ContextReloadNeeded.Provider
+          value={{ isReloadNeeded, setIsReloadNeeded }}
+        >
+          <AdminButtons />
+        </ContextReloadNeeded.Provider>
+      )}
       <Main>
         <InputSearch
           valueChange={setSearchDataCryptos}
           placeholder={"Research crypto..."}
-        />
-        <Triangle
-          visible={isLoading}
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="triangle-loading"
-          wrapperStyle={{}}
-          wrapperClass="fixed z-20 top-24 right-20"
         />
         <ContextReloadNeeded.Provider
           value={{ isReloadNeeded, setIsReloadNeeded }}
@@ -145,8 +170,6 @@ const page = () => {
               </CardContainer>
             </div>
           )}
-
-          {/* xl:px-40 */}
           <div className="w-full flex justify-center items-center">
             <CardContainer additionalCss="grid grid-cols-1 gap-y-10 md:gap-x-2 lg:gap-x-0 justify-center items-center md:grid-cols-2 md:w-3/4 lg:w-11/12 xl:grid-cols-3 xl:w-6/7 ">
               {offers &&

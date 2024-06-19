@@ -4,6 +4,7 @@ import {
   sellCryptoProps,
   updateCryptoProps,
 } from "@/Utils/type";
+import { cryptoFormProps } from "@/Utils/typeComponent";
 import axios from "axios";
 
 export async function allCrypto() {
@@ -19,7 +20,7 @@ export async function allCrypto() {
       return res;
     })
     .catch((e) => {
-      throw new Error(e);
+      return e;
     });
 }
 export async function historyCrypto(id: string) {
@@ -35,7 +36,7 @@ export async function historyCrypto(id: string) {
       return res.data;
     })
     .catch((e) => {
-      throw new Error(e);
+      return e;
     });
 }
 export async function searchCrypto(name: string) {
@@ -56,14 +57,17 @@ export async function searchCrypto(name: string) {
       return res;
     })
     .catch((e) => {
-      console.log(e);
-      throw new Error(e);
+      return e;
     });
 }
-export async function addCrypto(addCrypto: addCryptoProps) {
+export async function addCrypto(addCrypto: cryptoFormProps) {
+  console.log(addCrypto, "function");
   let url = `${process.env.NEXT_PUBLIC_API_URL}crypto/create`;
   let axiosConfig = {
     headers: {
+      "content-type": "application/json;charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
   };
@@ -72,7 +76,8 @@ export async function addCrypto(addCrypto: addCryptoProps) {
       url,
       {
         name: addCrypto.name,
-        value: addCrypto.value,
+        value: Number(addCrypto.value),
+        quantity: Number(addCrypto.quantity),
         image: addCrypto.image,
       },
       axiosConfig

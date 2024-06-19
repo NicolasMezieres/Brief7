@@ -48,15 +48,8 @@ const ModalAddOffer = ({
       setIsReloadNeeded(true);
     }
   }
-  // , setIsReloadNeeded(true);
   return (
     <div>
-      {/* <button
-        className={`${additionalCss} styleSubmit px-2 py-1 relative z-20 text-white transition-all ease-in duration-300 bg-orange-500 rounded-md border-2 border-slate-300 hover:text-orange-500 hover:bg-white hover:border-orange-500 cursor-pointer duration-500`}
-        onClick={handleOpen}
-      >
-        {content}
-      </button> */}
       <InputSubmit
         content={content}
         onClick={handleOpen}

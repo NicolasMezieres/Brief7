@@ -14,12 +14,11 @@ export async function allOffer() {
       return res;
     })
     .catch((e) => {
-      throw new Error(e);
+      return e;
     });
 }
 
 export async function addOffer(data: addOfferProps) {
-  console.log(data);
   let url = `${process.env.NEXT_PUBLIC_API_URL}offer/create`;
   let axiosConfig = {
     headers: {

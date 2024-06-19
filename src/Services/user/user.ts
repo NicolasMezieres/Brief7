@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export async function getUserAssets() {
   let url = `${process.env.NEXT_PUBLIC_API_URL}user/my-assets`;
   let axiosConfig = {
@@ -13,7 +12,7 @@ export async function getUserAssets() {
       return res;
     })
     .catch((e) => {
-      throw new Error(e);
+      return e;
     });
 }
 export async function getUsersAssets() {
