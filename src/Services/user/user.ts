@@ -28,7 +28,7 @@ export async function getUsersAssets() {
       return res.data;
     })
     .catch((e) => {
-      throw new Error(e);
+      return e
     });
 }
 export async function getUserTrades() {

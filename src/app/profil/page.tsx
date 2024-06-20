@@ -5,11 +5,8 @@ import Logout from "@/Components/Inputs/logout";
 import InputSubmit from "@/Components/Inputs/submit";
 import Logo from "@/Components/Logo/Logo";
 import Main from "@/Components/Main/Main";
-import ModalAddCrypto from "@/Components/Modal/ModalAddCrypto";
-import ModalAllPromoCode from "@/Components/Modal/ModalAllPromoCode";
-import ModalCreatePromoCode from "@/Components/Modal/ModalCreatePromoCode";
-import Paragraph from "@/Components/Paragraph/paragraph";
 import Wallet from "@/Components/Wallet/wallet";
+import LoadingPage from "@/Components/loadingPage/LoadingPage";
 import { getUserAssets } from "@/Services/user/user";
 import { Roles } from "@/Utils/enum";
 import { usersAssetsProps } from "@/Utils/type";
@@ -25,8 +22,11 @@ const page = () => {
   const [dataUser, setDataUser] = useState<usersAssetsProps>();
   const [role, setRole] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+
   useEffect(() => {
     setRole(window.localStorage.getItem("role"));
+    setIsLoadingPage(false)
     async function getMyAssets() {
       const response = await getUserAssets();
       if (response.status === 200) {
@@ -37,10 +37,15 @@ const page = () => {
     getMyAssets();
   }, [isReloadNeeded, isLoading]);
 
-  if (isLoading) {
+  if (isLoadingPage) {
     return (
+      <LoadingPage />
+    );
+  }
+  return (
+    <div>
       <Triangle
-        visible={true}
+        visible={isLoading}
         height="80"
         width="80"
         color="#4fa94d"
@@ -48,10 +53,6 @@ const page = () => {
         wrapperStyle={{}}
         wrapperClass="fixed z-20 top-24 right-20"
       />
-    );
-  }
-  return (
-    <div>
       <Contextloading.Provider value={{ isLoading, setIsLoading }}>
         <Header>
           <div className="w-full flex items-center justify-center gap-4 md:gap-16  md:mr-7">
@@ -108,7 +109,7 @@ const page = () => {
             </div>
           </div>
         )}
-        {dataUser && (
+        {dataUser && dataUser.UserHasCrypto.length > 0 && (
           <h2 className="styleEmail text-center text-xl m-4">My Cryptos</h2>
         )}
         <div className="w-full  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -151,8 +152,8 @@ const page = () => {
               );
             })}
         </div>
-        {!dataUser && (
-          <h3 className="styleEmail text-xl text-center">Haven't Crypto</h3>
+        {!dataUser || dataUser.UserHasCrypto.length <= 1 && (
+          <h3 className="styleEmail text-xl text-center mt-4">Haven't Crypto</h3>
         )}
       </Main>
     </div>

@@ -10,6 +10,7 @@ import InputSubmit from "@/Components/Inputs/submit";
 import Logo from "@/Components/Logo/Logo";
 import Main from "@/Components/Main/Main";
 import Wallet from "@/Components/Wallet/wallet";
+import LoadingPage from "@/Components/loadingPage/LoadingPage";
 import { allCrypto, searchCrypto } from "@/Services/crypto/crypto";
 import { allOffer } from "@/Services/offer/offer";
 import { getUserAssets } from "@/Services/user/user";
@@ -31,58 +32,65 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isReloadNeeded, setIsReloadNeeded] = useState(false);
   const [role, setRole] = useState<string>("");
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  async function getMyAssets() {
+    const response = await getUserAssets();
+    if (response.status === 200) {
+      setDataUser(response.data);
+      setIsLoading(false);
+    }
+    if (
+      response.response?.status === 401 ||
+      response.response?.status === 403
+    ) {
+      push("/signin");
+    }
+  }
+  async function getAllOffer() {
+    const response = await allOffer();
+    if (response.status === 200) {
+      setOffers(response.data);
+    }
+  }
   useEffect(() => {
     setRole(window.localStorage.getItem("role"));
     setIsReloadNeeded(false);
     setIsLoading(true);
-    async function getMyAssets() {
-      const response = await getUserAssets();
-      if (response.status === 200) {
-        setDataUser(response.data);
-        setIsLoading(false);
-      }
-      if (
-        response.response?.status === 401 ||
-        response.response?.status === 403
-      ) {
-        push("/signin");
-      }
-    }
+    setIsLoadingPage(false)
     getMyAssets();
+    getAllOffer();
   }, [isReloadNeeded]);
 
   useEffect(() => {
     setIsReloadNeeded(false);
-    async function researchCrypto() {
-      setIsLoading(true);
-      const response = await searchCrypto(searchDataCryptos);
-      if (response.status === 200) {
-        setCryptos(response.data);
-      }
-      setIsLoading(false);
+    searchDelay()
+  }, [searchDataCryptos, isReloadNeeded]);
+  async function researchCrypto() {
+    setIsLoading(true);
+    const response = await searchCrypto(searchDataCryptos);
+    if (response.status === 200) {
+      setCryptos(response.data);
     }
+    setIsLoading(false);
+  }
+  function searchDelay(){
+    researchCrypto();
     const delaySearch = setTimeout(() => {
       researchCrypto();
     }, 400);
     return () => {
       clearTimeout(delaySearch);
     };
-  }, [searchDataCryptos, isReloadNeeded]);
-
-  useEffect(() => {
-    async function getAllOffer() {
-      const response = await allOffer();
-      if (response.status === 200) {
-        setOffers(response.data);
-      }
-    }
-    getAllOffer();
-  }, [isReloadNeeded]);
-
-  if (isLoading) {
+  }
+  if (isLoadingPage) {
     return (
+      <LoadingPage/>
+    );
+  }
+  return (
+    <div>
       <Triangle
-        visible={true}
+        visible={isLoading}
         height="80"
         width="80"
         color="#4fa94d"
@@ -90,13 +98,8 @@ const page = () => {
         wrapperStyle={{}}
         wrapperClass="fixed z-20 top-24 right-20"
       />
-    );
-  }
-  return (
-    <div>
-      <p>text</p>
       <Contextloading.Provider value={{ isLoading, setIsLoading }}>
-        <Header additionalCss="">
+        <Header additionalCss="mt-4">
           <div className="flex justify-center items-center gap-4 md:gap-16 md:mr-8">
             <div className="flex flex-col md:flex-row gap-8 mb-10">
               <Wallet user={dataUser} />
@@ -154,7 +157,7 @@ const page = () => {
                       })}
                   </Slider>
                 ) : (
-                  <div className="flex flex-col justify-center lg:gap-28">
+                  <div className="flex justify-center lg:gap-28">
                     {cryptos.map((crypto) => {
                       return (
                         <CardCrypto

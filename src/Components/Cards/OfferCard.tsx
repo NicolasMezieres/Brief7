@@ -34,14 +34,14 @@ export const OfferCard = ({
   }
 
   return (
-    <div className="justify-self-center w-64 lg:w-80 h-96 gap-4 py-4 flex flex-col items-center border-2 border-white rounded-xl boxShadowOrange transition duration-700 hover:-translate-y-1 hover:scale-110">
+    <div className="justify-self-center w-64 lg:w-80 h-96 gap-4 py-2 flex flex-col items-center border-2 border-white rounded-xl boxShadowOrange transition duration-700 hover:-translate-y-1 hover:scale-110">
       <Paragraph content={offer.Crypto.name} />
       <Image
         width={160}
         height={80}
         src={offer.Crypto.image}
         alt={`Picture of ${offer.Crypto.name}`}
-        className="w-40 h-32 object-cover rounded-xl"
+        className="w-40 h-28 object-cover rounded-xl"
       />
       <p>
         Seller:{" "}
@@ -77,7 +77,7 @@ export const OfferCard = ({
         )}
 
       {window.localStorage.getItem("role") === Roles.admin && (
-        <div className="flex gap-4">
+        <div className="flex gap-4 mb-6">
           <InputSubmit content="Update" onClick={handleDeleteCryptoOffer} />
           <InputSubmit content="Delete" onClick={handleDeleteCryptoOffer} />
         </div>

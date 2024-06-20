@@ -175,6 +175,56 @@ export type historyCryptoProps = {
   updated_at: string;
   value: number;
 };
+export type myTradeProps = {
+  
+    id: string,
+    id_giver: string,
+    id_receiver: string,
+    id_crypto: string,
+    amount_traded: number,
+    created_at: string,
+    updated_at: string,
+    Crypto: {
+        id: string,
+        name: string,
+        value: number,
+        image: string,
+        quantity: number,
+        created_at: string,
+        updated_at: string
+    },
+    Giver: {
+        id: string,
+        firstName: string,
+        lastName: string,
+        pseudo: string,
+        hash: string,
+        email: string,
+        roleId: string,
+        isActive: boolean,
+        city: string,
+        dollarAvailables: number,
+        age: number,
+        created_at:string,
+        updated_at: string
+    },
+    Receiver: {
+        id: string,
+        firstName: string,
+        lastName: string,
+        pseudo: string,
+        hash: string,
+        email: string,
+        roleId: string,
+        isActive: boolean,
+        city: string,
+        dollarAvailables: number,
+        age: number,
+        created_at: string,
+        updated_at: string
+    }
+
+}
 // export type amountCryptHasUser = {
 //    amount: number
 // }

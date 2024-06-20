@@ -9,6 +9,7 @@ const CardUserAsset = ({ userInfo }: { userInfo: usersAssetsProps }) => {
       <p>{userInfo.lastName}</p>
       <p>{userInfo.pseudo}</p>
       <p>cagnotte : {userInfo.dollarAvailables} $</p>
+      <div className="h-80 overflow-y-scroll">
       {userInfo.UserHasCrypto &&
         userInfo.UserHasCrypto.map((Element) => {
           return (
@@ -23,11 +24,12 @@ const CardUserAsset = ({ userInfo }: { userInfo: usersAssetsProps }) => {
               />
               <p>{Element.Crypto.name}</p>
               <p>Quantité restante : {Element.Crypto.quantity}</p>
-              <p>{Element.Crypto.value} $</p>
+              <p>{Element.Crypto.value.toFixed(2)} $</p>
               <p>Possede : {Element.amount}</p>
             </div>
           );
         })}
+        </div>
     </div>
   );
 };

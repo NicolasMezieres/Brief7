@@ -10,26 +10,16 @@ const Wallet = ({ user, totalDollar }: WalletUserProps) => {
   const [totalDollarPossible, setTotalDollarPossible] = useState(0);
   const { isLoading, setIsLoading } = useContext(Contextloading);
   useEffect(() => {
-    test();
-  }, [user?.dollarAvailables, isLoading]);
-  function test() {
-    if (user) {
-      setTotalDollarPossible(user.dollarAvailables);
-      for (let i = 0; i < user.UserHasCrypto.length; i++) {
-        if ((i = 0)) {
-          setTotalDollarPossible(user.dollarAvailables);
-        }
-        setTotalDollarPossible(
-          user.UserHasCrypto[i].Crypto.value * user.UserHasCrypto[i].amount +
-            totalDollarPossible
-        );
-      }
-      user.UserHasCrypto.forEach((Element) => {
-        setTotalDollarPossible(
-          Element.Crypto.value * Element.amount + totalDollarPossible
-        );
-      });
-    }
+    if(user){
+    dollarPossible();
+  }
+  }, [user]);
+  async function dollarPossible(){
+    let total = 0;
+    user.UserHasCrypto.map((Element)=>{
+      total = total + Element.amount * Element.Crypto.value;
+    })
+    setTotalDollarPossible(total);
   }
   return (
     <div>
@@ -45,7 +35,7 @@ const Wallet = ({ user, totalDollar }: WalletUserProps) => {
             Wallet <IoIosArrowDown />
           </p>
         </button>
-        <div className="wallet_burger w-60 border-2 mt-3 border-white opacity-0 absolute top-12 rounded-3xl py-4 bg-black px-2 duration-500">
+        <div className="wallet_burger w-60 border-2 mt-3 border-white opacity-0 absolute top-10 rounded-3xl p-2 bg-black duration-500">
           <div className=" text-white text-center text-sm font-bold py-1 duration-300 rounded-lg hover:bg-gray-800">
             <p>
               Money vailable:{" "}
