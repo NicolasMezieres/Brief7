@@ -15,7 +15,7 @@ const InputForm = ({
   defaultValue,
 }: inputFormProps) => {
   return (
-    <div>
+    <div className="w-60">
       <label className={`${labelCss} mb-3 block text-base font-medium `}>
         {content}
       </label>

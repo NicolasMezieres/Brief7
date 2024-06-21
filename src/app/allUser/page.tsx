@@ -1,6 +1,10 @@
 "use client";
 import CardContainer from "@/Components/Cards/CardContainer";
 import CardUserAsset from "@/Components/Cards/CardUserAsset";
+import Footer from "@/Components/Footer/Footer";
+import Header from "@/Components/Header/Header";
+import Logo from "@/Components/Logo/Logo";
+import Paragraph from "@/Components/Paragraph/paragraph";
 import { getUsersAssets } from "@/Services/user/user";
 import { settings } from "@/Utils/slider";
 import { usersAssetsProps } from "@/Utils/type";
@@ -23,6 +27,9 @@ const page = () => {
   }, []);
   return (
     <div>
+      <Header>
+        <Logo />
+      </Header>
       <CardContainer additionalCss="w-full flex justify-center items-center flex-wrap gap-8">
         {users &&
           users.map((Element) => {

@@ -1,10 +1,12 @@
 "use client";
 import AdminButtons from "@/Components/Admin/AdminButtons";
+import Footer from "@/Components/Footer/Footer";
 import Header from "@/Components/Header/Header";
 import Logout from "@/Components/Inputs/logout";
 import InputSubmit from "@/Components/Inputs/submit";
 import Logo from "@/Components/Logo/Logo";
 import Main from "@/Components/Main/Main";
+import Paragraph from "@/Components/Paragraph/paragraph";
 import Wallet from "@/Components/Wallet/wallet";
 import LoadingPage from "@/Components/loadingPage/LoadingPage";
 import { getUserAssets } from "@/Services/user/user";

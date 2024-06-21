@@ -8,6 +8,7 @@ import Form from "../Form/Form";
 import InputForm from "../Inputs/inputForm";
 import { addPromoCode } from "@/Services/promoCode/promoCode";
 import { schemaPromoCode } from "@/Validator/validatorForm";
+import { toast } from "react-toastify";
 
 const ModalCreatePromoCode = () => {
   const style = {
@@ -37,8 +38,11 @@ const ModalCreatePromoCode = () => {
     resolver: yupResolver(schemaPromoCode),
   });
   const onSubmit: SubmitHandler<promoCodeFormProps> = async (data) => {
-    console.log(data);
     const response = await addPromoCode(data);
+    if(response.status === 201){
+      handleClose()
+      toast.success("create")
+    }
   };
   return (
     <div>

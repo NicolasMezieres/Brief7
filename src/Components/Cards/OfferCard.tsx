@@ -67,23 +67,14 @@ export const OfferCard = ({
       </p>
       {offer.Crypto.value * offer.amount <= user.dollarAvailables &&
         user.pseudo !== offer.User.pseudo && (
-          //   <button
-          //     onClick={handleBuyCryptoOffer}
-          //     className="styleSubmit px-2 py-1 relative z-20 text-white transition-all ease-in duration-300 bg-orange-500 rounded-md border-2 border-slate-300  hover:text-orange-500 hover:bg-white hover:border-orange-500 cursor-pointer duration-500"
-          //   >
-          //     Buy
-          // </button>
           <InputSubmit content={"buy"} onClick={handleBuyCryptoOffer} />
         )}
 
       {window.localStorage.getItem("role") === Roles.admin && (
         <div className="flex gap-4 mb-6">
-          <InputSubmit content="Update" onClick={handleDeleteCryptoOffer} />
           <InputSubmit content="Delete" onClick={handleDeleteCryptoOffer} />
         </div>
       )}
-
-      {/* <CardCrypto cryptoProps={offer.Crypto} additionalCss={""} /> */}
     </div>
   );
 };

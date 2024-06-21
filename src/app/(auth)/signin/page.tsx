@@ -36,7 +36,7 @@ const page = () => {
         console.log(response.data);
         window.localStorage.setItem("role", response.data.user.Role.id);
         toast.success("succes");
-        push("/home");
+        push("/profil");
       }
     }
   };
