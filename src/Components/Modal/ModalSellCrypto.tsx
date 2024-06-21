@@ -38,7 +38,6 @@ const ModalSellCrypto = ({
     setOpen(false);
   }
   async function handleSellCrypto() {
-    //todo rajouter id_crypto et amount
     const data = {
       id_crypto: crypto.id,
       amount: amount,

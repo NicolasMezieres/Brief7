@@ -31,7 +31,8 @@ const ModalAddCrypto = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<cryptoFormProps>({
+    // typage cryptoFormProps
+  } = useForm<any>({
     mode: "onChange",
     resolver: yupResolver(schemaCrypto),
   });

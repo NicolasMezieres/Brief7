@@ -32,7 +32,7 @@ const page = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<addUserProps>({
+  } = useForm<any>({
     mode: "all",
     resolver: yupResolver(schema),
   });

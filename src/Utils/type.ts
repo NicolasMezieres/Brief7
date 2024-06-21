@@ -3,14 +3,14 @@
  */
 export type addUserProps = {
   firstName: string;
-  age: number;
   lastName: string;
+  age: number;
   pseudo: string;
   city: string;
   email: string;
   password: string;
   rePassword: string;
-  promoCode?: string;
+  promoCode: string;
 };
 /**
  * @alias responseAddUser
