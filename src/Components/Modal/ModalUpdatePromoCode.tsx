@@ -35,7 +35,7 @@ const ModalUpdatePromoCode = ({
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<addPromoCodeProps>({
+  } = useForm<any>({
     mode: "onChange",
     resolver: yupResolver(schemaPromoCode),
   });
