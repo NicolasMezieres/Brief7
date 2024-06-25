@@ -1,113 +1,207 @@
-import Image from "next/image";
+"use client";
+import "@/Components/style.css";
+import Footer from "@/Components/Footer/Footer";
+import Form from "@/Components/Form/Form";
+import Header from "@/Components/Header/Header";
+import Logo from "@/Components/Logo/Logo";
+import Main from "@/Components/Main/Main";
+import Paragraph from "@/Components/Paragraph/paragraph";
+import ErrorMsg from "@/Components/errorMsg/ErrorMsg";
+import Blur from "@/Components/style/blur";
+import { addUser, login } from "@/Services/auth/auth";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { addUserProps } from "@/Utils/type";
+import { apiCityProps, cityProps } from "@/Utils/typeComponent";
+import { getCity } from "@/Services/apiCity/apiCity";
+import yup from "yup";
+import { schema } from "@/Validator/validatorForm";
+import { yupResolver } from "@hookform/resolvers/yup";
+import InputForm from "@/Components/Inputs/inputForm";
+import { Triangle } from "react-loader-spinner";
 
-export default function Home() {
+const page = () => {
+  const { push } = useRouter();
+  const [city, setCity] = useState<apiCityProps[]>([]);
+  const [searchCity, setSearchCity] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<any>({
+    mode: "all",
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    async function getDataCity() {
+      const response = await getCity(watch("city"));
+      if (response) {
+        if (response.status === 200) {
+          setCity(response.data);
+        }
+      }
+    }
+    getDataCity();
+  }, [watch("city")]);
+
+  const onSubmit: SubmitHandler<addUserProps> = async (data) => {
+    if (
+      city.length < 1 ||
+      city.find((element) => {
+        element.nom !== searchCity;
+      })
+    ) {
+      return toast.error("Not found city");
+    }
+    if (data.password !== data.rePassword) {
+      return toast.error("Passwords not must be similar", {
+        autoClose: 5000,
+      });
+    }
+    setIsLoading(true);
+    const response = await addUser(data);
+    if (response) {
+      if (response?.status === 201) {
+        window.localStorage.setItem("token", response.data.access_token);
+        toast.success("succes");
+        push("/signin");
+      }
+    }
+    return setIsLoading(false);
+  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+    <div>
+      <Triangle
+        visible={isLoading}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="triangle-loading"
+        wrapperStyle={{}}
+        wrapperClass="fixed z-20 top-20 right-20"
+      />
+      <Header>
+        <Logo />
+      </Header>
+      <Main additionalCss="styleBgImageMain min-h-screen bg-cover mt-8 relative flex justify-center items-center">
+        <Blur additionalCss="w-full top-0 h-56 z-10 bg-gradient-to-b from-black " />
+        <Blur additionalCss="w-full bottom-0 h-56 z-10 bg-gradient-to-t from-black  " />
+        <Form
+          onSubmit={handleSubmit(onSubmit)}
+          additionalCss="gap-6 bg-black relative z-20 p-4 rounded-lg border-2 border-white"
+        >
+          <Paragraph
+            additionalCss={"styleTitle relative z-10 text-3xl text-orange-500"}
+            content={"Sign up"}
+          />
+          <div className="flex flex-col justify-center items-center">
+            <div className="md:flex  md:gap-8">
+              <InputForm
+                content={"Your firstName"}
+                type={"text"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("firstName")}
+                errors={errors.firstName?.message}
+              />
+              <InputForm
+                content={"Your lastName"}
+                type={"text"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("lastName")}
+                errors={errors.lastName?.message}
+              />
+            </div>
+            <div className="md:flex  md:gap-8">
+              <InputForm
+                content={"Your pseudo"}
+                type={"text"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("pseudo")}
+                errors={errors.pseudo?.message}
+              />
+              <InputForm
+                content={"Your age"}
+                type={"number"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("age")}
+                errors={errors.age?.message}
+              />
+            </div>
+            <div className="md:flex  md:gap-8">
+              <InputForm
+                content={"Your Email"}
+                type={"email"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("email")}
+                errors={errors.email?.message}
+              />
+              <InputForm
+                content={"Your city"}
+                type={"text"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("city")}
+                errors={errors.city?.message}
+                listData={city}
+                // change={setSearchCity}
+              />
+            </div>
+            <div className="md:flex md:justify-center md:items-center md:gap-8">
+              <InputForm
+                content={"Your Password"}
+                type={"password"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center "
+                inputCss="relative py-0 z-10 text-center border-2 border-orange-600"
+                verifInput={register("password")}
+                errors={errors.password?.message}
+              />
+              <InputForm
+                content={"Your Confirm Password"}
+                type={"password"}
+                labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+                inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+                verifInput={register("rePassword", { required: true })}
+                errors={
+                  errors.rePassword && (
+                    <ErrorMsg
+                      content={errors.rePassword.message}
+                      additionalCss="relative z-10 mt-2"
+                    />
+                  )
+                }
+              />
+            </div>
+            <InputForm
+              content={"Your promo Code"}
+              type={"text"}
+              labelCss="styleEmail mt-3 relative z-10 text-orange-300 text-center"
+              inputCss="relative py-0 bg-slate-300 text-center text-orange-500 border-2 border-orange-600 z-10 "
+              verifInput={register("promoCode")}
+              errors={errors.promoCode?.message}
             />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          </div>
+          <input
+            type="submit"
+            className="styleSubmit relative z-20 px-5 py-2.5 transition-all ease-in duration-75 bg-orange-500 rounded-md border-2 border-slate-200  hover:text-orange-500 hover:bg-white hover:border-orange-500 cursor-pointer duration-500"
+            value={"Sign up"}
+          />
+        </Form>
+      </Main>
+      <Footer>
+        <Paragraph additionalCss="" content={"© Copyright - 2024"} />
+      </Footer>
+    </div>
   );
-}
+};
+
+export default page;
